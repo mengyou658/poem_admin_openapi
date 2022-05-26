@@ -1,5 +1,7 @@
 ## 平台简介
 
+根据[https://github.com/lingdu1234/poem_admin](https://github.com/lingdu1234/poem_admin)项目修改，使用poem-openapi包装api
+
 后端 使用poem 编写, 完成了基础的api，算是一个demo实例吧，
 
 前端在  [ruoyi-vue3](https://github.com/yangzongzhuan/RuoYi-Vue3) 3.8.1上简单修改，

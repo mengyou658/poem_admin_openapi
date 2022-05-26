@@ -17,6 +17,8 @@ use poem::{
     },
     EndpointExt, Result, Route, Server,
 };
+use poem_openapi::{param::Query, payload::PlainText, OpenApi, OpenApiService};
+
 use poem::listener::RustlsCertificate;
 use tracing_subscriber::{fmt, layer::SubscriberExt, EnvFilter, Registry};
 

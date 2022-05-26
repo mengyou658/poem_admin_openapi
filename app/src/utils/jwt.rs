@@ -3,6 +3,7 @@ use headers::{authorization::Bearer, Authorization};
 use jsonwebtoken::{decode, encode, errors::ErrorKind, DecodingKey, EncodingKey, Header, Validation};
 use once_cell::sync::Lazy;
 use poem::{http::StatusCode, web::TypedHeader, Error, FromRequest, Request, RequestBody, Result};
+use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
 
 use crate::apps::system::check_user_online;
@@ -128,7 +129,7 @@ pub async fn authorize(payload: AuthPayload, token_id: String) -> Result<AuthBod
 //     }
 // }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Object)]
 pub struct AuthBody {
     token: String,
     token_type: String,

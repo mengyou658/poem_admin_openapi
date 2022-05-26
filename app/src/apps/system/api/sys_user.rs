@@ -19,6 +19,13 @@ use tokio::join;
 use super::super::service;
 use crate::utils::jwt::{AuthBody, Claims};
 
+pub struct SysUser;
+
+impl SysUser {
+
+}
+
+
 /// get_user_list 获取用户列表
 /// page_params 分页参数
 #[handler]

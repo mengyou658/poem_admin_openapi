@@ -1,23 +1,22 @@
-mod common;
-mod sys_api_db;
-mod sys_dept;
-mod sys_dict_data;
-mod sys_dict_type;
-mod sys_job;
-mod sys_job_log;
-mod sys_login_log;
-mod sys_menu;
+pub mod common;
+pub mod sys_api_db;
+pub mod sys_dept;
+pub mod sys_dict_data;
+pub mod sys_dict_type;
+pub mod sys_job;
+pub mod sys_job_log;
+pub mod sys_login_log;
+pub mod sys_menu;
 pub mod sys_oper_log;
-mod sys_post;
-mod sys_role; // 角色管理
-mod sys_update_log;
+pub mod sys_post;
+pub mod sys_role; // 角色管理
+pub mod sys_update_log;
 
 //
 use poem::{delete, get, post, put, Route};
 mod sys_user; // 用户管理
 mod sys_user_online; // 操作日志
 
-pub use common::get_captcha;
 pub use sys_user::login;
 pub use sys_user_online::log_out;
 
@@ -36,8 +35,8 @@ pub fn system_api() -> Route {
         .nest("/job", sys_job_api()) // 定时任务
         .nest("/job_log", sys_job_log_api()) // 定时任务日志
         .nest("/oper_log", sys_oper_log_api()) // 操作日志
-        .nest("/api_db", sys_api_db_api()) // 操作日志
-        .nest("/monitor", sys_monitor_api()) // 操作日志
+        // .nest("/api_db", sys_api_db_api()) // 操作日志
+        // .nest("/monitor", sys_monitor_api()) // 操作日志
         .nest("/update_log", sys_update_log_api()) // 更新日志
 }
 
@@ -174,14 +173,14 @@ fn sys_oper_log_api() -> Route {
         .at("/clean", delete(sys_oper_log::clean)) // 清空
         .at("/delete", delete(sys_oper_log::delete)) // 硬删除
 }
-fn sys_api_db_api() -> Route {
-    Route::new()
-        .at("/get_by_id", get(sys_api_db::get_by_id)) // 按id获取
-        .at("/add", post(sys_api_db::add)) // 添加
-}
-fn sys_monitor_api() -> Route {
-    Route::new().at("/server", get(common::get_server_info)) // 服务器信息
-}
+// fn sys_api_db_api() -> Route {
+//     Route::new()
+//         .at("/get_by_id", get(sys_api_db::get_by_id)) // 按id获取
+//         .at("/add", post(sys_api_db::add)) // 添加
+// }
+// fn sys_monitor_api() -> Route {
+//     Route::new().at("/server", get(common::get_server_info)) // 服务器信息
+// }
 
 fn sys_update_log_api() -> Route {
     Route::new()

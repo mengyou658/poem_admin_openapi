@@ -1,7 +1,8 @@
+use poem_openapi::Object;
 use sea_orm::{entity::prelude::DateTime, FromQueryResult};
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Object)]
 pub struct SearchReq {
     pub post_id: Option<String>,
     pub post_code: Option<String>,
@@ -11,7 +12,7 @@ pub struct SearchReq {
     pub end_time: Option<String>,
 }
 
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Deserialize, Clone, Debug, Object)]
 pub struct AddReq {
     pub post_code: String,
     pub post_name: String,
@@ -20,12 +21,12 @@ pub struct AddReq {
     pub remark: Option<String>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Object)]
 pub struct DeleteReq {
     pub post_ids: Vec<String>,
 }
 
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Deserialize, Clone, Debug, Object)]
 pub struct EditReq {
     pub post_id: String,
     pub post_code: String,
@@ -35,7 +36,7 @@ pub struct EditReq {
     pub remark: Option<String>,
 }
 
-#[derive(Debug, Serialize, FromQueryResult)]
+#[derive(Debug, Serialize, FromQueryResult, Object)]
 pub struct Resp {
     pub post_id: String,
     pub post_code: String,

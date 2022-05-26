@@ -1,9 +1,10 @@
+use poem_openapi::Object;
 use sea_orm::FromQueryResult;
 use serde::{Deserialize, Serialize};
 
 use crate::system::entities::sys_menu;
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, Object)]
 pub struct SearchReq {
     pub id: Option<String>,
     pub menu_name: Option<String>,
@@ -14,7 +15,7 @@ pub struct SearchReq {
     pub end_time: Option<String>,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone, FromQueryResult, Default)]
+#[derive(Deserialize, Serialize, Debug, Clone, FromQueryResult, Default, Object)]
 pub struct MenuResp {
     pub id: String,
     pub pid: String,
@@ -37,7 +38,7 @@ pub struct MenuResp {
     pub remark: String,
 }
 
-#[derive(Serialize, Clone, Debug)]
+#[derive(Serialize, Clone, Debug, Object)]
 pub struct MenuRelated {
     #[serde(flatten)]
     pub menu: sys_menu::Model,
@@ -45,7 +46,7 @@ pub struct MenuRelated {
     pub apis: Vec<String>,
 }
 
-#[derive(Serialize, Clone, Debug, Default)]
+#[derive(Serialize, Clone, Debug, Default, Object)]
 pub struct UserMenu {
     pub id: String,
     pub pid: String,
@@ -59,7 +60,7 @@ pub struct UserMenu {
     pub meta: Meta,
 }
 
-#[derive(Serialize, Clone, Debug, Default)]
+#[derive(Serialize, Clone, Debug, Default, Object)]
 pub struct Meta {
     pub icon: String,
     pub title: String,
@@ -68,14 +69,14 @@ pub struct Meta {
     pub hidden: bool,
 }
 
-#[derive(Serialize, Clone, Debug, Default)]
+#[derive(Serialize, Clone, Debug, Default, Object)]
 pub struct SysMenuTree {
     #[serde(flatten)]
     pub user_menu: UserMenu,
     pub children: Option<Vec<SysMenuTree>>,
 }
 
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Deserialize, Clone, Debug, Object)]
 pub struct AddReq {
     pub pid: String,
     pub path: Option<String>,
@@ -97,12 +98,12 @@ pub struct AddReq {
     pub remark: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Object)]
 pub struct DeleteReq {
     pub id: String,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Object)]
 pub struct EditReq {
     pub id: String,
     pub pid: String,
@@ -125,7 +126,7 @@ pub struct EditReq {
     pub remark: String,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Object)]
 pub struct LogCacheEditReq {
     pub id: String,
     pub log_method: String,

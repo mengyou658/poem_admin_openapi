@@ -1,6 +1,7 @@
+use poem_openapi::Object;
 use serde::Deserialize;
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Object)]
 pub struct SearchReq {
     pub oper_id: Option<String>,
     pub title: Option<String>,
@@ -11,7 +12,7 @@ pub struct SearchReq {
     pub end_time: Option<String>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Object)]
 pub struct DeleteReq {
     pub oper_log_ids: Vec<String>,
 }

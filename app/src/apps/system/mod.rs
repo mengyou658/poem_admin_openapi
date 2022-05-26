@@ -1,8 +1,8 @@
-mod api;
-mod service;
+pub mod api;
+pub mod service;
 
 // 重新导出
-pub use api::{get_captcha, log_out, login as SysLogin, system_api};
+pub use api::{log_out, login as SysLogin, system_api};
 pub use service::{
     sys_job::{get_active_job, get_by_id as get_job_by_id},
     sys_job_log::add as sys_job_log_add,

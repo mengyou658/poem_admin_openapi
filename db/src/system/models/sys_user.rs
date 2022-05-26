@@ -1,10 +1,11 @@
 use chrono::NaiveDateTime;
+use poem_openapi::Object;
 use sea_orm::FromQueryResult;
 use serde::{Deserialize, Serialize};
 
 use super::sys_dept::DeptResp;
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Object)]
 pub struct AddReq {
     pub user_name: String,
     pub user_nickname: String,
@@ -23,7 +24,7 @@ pub struct AddReq {
     pub role_id: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Object)]
 pub struct EditReq {
     pub id: String,
     pub user_name: String,
@@ -42,7 +43,7 @@ pub struct EditReq {
     pub role_id: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Object)]
 pub struct UpdateProfileReq {
     pub id: String,
     pub user_nickname: String,
@@ -51,7 +52,7 @@ pub struct UpdateProfileReq {
     pub sex: String,
 }
 
-#[derive(Debug, Clone, Default, Serialize, FromQueryResult, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, FromQueryResult, Deserialize, Object)]
 pub struct UserResp {
     pub id: String,
     pub user_name: String,
@@ -68,14 +69,14 @@ pub struct UserResp {
     pub created_at: Option<NaiveDateTime>,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Object)]
 pub struct UserWithDept {
     #[serde(flatten)]
     pub user: UserResp,
     pub dept: DeptResp,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Object)]
 pub struct UserInfomaion {
     pub user_info: UserWithDept,
     pub post_ids: Vec<String>,
@@ -84,7 +85,7 @@ pub struct UserInfomaion {
     pub dept_id: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Object)]
 pub struct SearchReq {
     pub user_id: Option<String>,
     pub role_id: Option<String>,
@@ -98,13 +99,13 @@ pub struct SearchReq {
     pub end_time: Option<String>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Object)]
 pub struct DeleteReq {
     pub user_ids: Vec<String>,
 }
 
 ///  用户登录
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Object)]
 pub struct UserLoginReq {
     ///  用户名
     pub user_name: String,
@@ -114,38 +115,38 @@ pub struct UserLoginReq {
     pub uuid: String,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Object)]
 pub struct UserInfo {
     pub user: UserWithDept,
     pub roles: Vec<String>,
     pub depts: Vec<String>,
     pub permissions: Vec<String>,
 }
-#[derive(Deserialize)]
+#[derive(Deserialize, Object)]
 pub struct ResetPwdReq {
     pub user_id: String,
     pub new_passwd: String,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Object)]
 pub struct UpdatePwdReq {
     pub old_passwd: String,
     pub new_passwd: String,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, Object)]
 pub struct ChangeStatusReq {
     pub user_id: String,
     pub status: String,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, Object)]
 pub struct ChangeRoleReq {
     pub user_id: String,
     pub role_id: String,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, Object)]
 pub struct ChangeDeptReq {
     pub user_id: String,
     pub dept_id: String,

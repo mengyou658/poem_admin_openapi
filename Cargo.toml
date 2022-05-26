@@ -1,7 +1,7 @@
 
 
 [workspace]
-members = ["app", "bin", "configs", "db", "migration"]
+members = ["app", "bin", "configs", "db", "migration", "app_derive"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [profile.release]
 codegen-units = 1
