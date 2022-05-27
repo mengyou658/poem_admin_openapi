@@ -1,8 +1,9 @@
 use poem_openapi::Object;
 use serde::Deserialize;
+use app_derive::QueryObject;
 
-#[derive(Deserialize, Debug, Object)]
-pub struct SearchReq {
+#[derive(Deserialize, Debug, Object, QueryObject)]
+pub struct DictDataSearchReq {
     pub dict_data_id: Option<String>,
     pub dict_type: Option<String>,
     pub dict_label: Option<String>,
@@ -11,8 +12,8 @@ pub struct SearchReq {
     pub end_time: Option<String>,
 }
 
-#[derive(Default, Deserialize, Clone, Debug, Object)]
-pub struct AddReq {
+#[derive(Default, Deserialize, Clone, Debug, Object, QueryObject)]
+pub struct DictDataAddReq {
     pub dict_type: String,
     pub dict_label: String,
     pub dict_value: String,
@@ -24,13 +25,13 @@ pub struct AddReq {
     pub remark: Option<String>,
 }
 
-#[derive(Deserialize, Object)]
-pub struct DeleteReq {
+#[derive(Deserialize, Object, QueryObject)]
+pub struct DictDataDeleteReq {
     pub dict_data_ids: Vec<String>,
 }
 
-#[derive(Deserialize, Debug, Object)]
-pub struct EditReq {
+#[derive(Deserialize, Debug, Object, QueryObject)]
+pub struct DictDataEditReq {
     pub dict_data_id: String,
     pub dict_type: String,
     pub dict_label: String,

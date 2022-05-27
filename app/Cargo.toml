@@ -9,6 +9,7 @@ version = "0.1.0"
 #
 configs = {path = "../configs"}
 db = {path = "../db"}
+app_derive = {path = "../app_derive" }
 #
 anyhow = "1"
 bytes = "1"

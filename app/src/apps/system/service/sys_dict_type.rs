@@ -3,8 +3,8 @@ use chrono::{Local, NaiveDateTime};
 use db::{
     common::res::{ListData, PageParams},
     system::{
-        entities::{prelude::SysDictType, sys_dict_data, sys_dict_type},
-        models::sys_dict_type::{AddReq, DeleteReq, EditReq, SearchReq},
+      entities::{prelude::SysDictType, sys_dict_data, sys_dict_type},
+      models::sys_dict_type::{SysDictAddReq, SysDictDeleteReq, SysDictEditReq, SysDictSearchReq},
     },
 };
 use sea_orm::{
@@ -14,7 +14,7 @@ use sea_orm::{
 /// get_list 获取列表
 /// page_params 分页参数
 /// db 数据库连接 使用db.0
-pub async fn get_sort_list(db: &DatabaseConnection, page_params: PageParams, req: SearchReq) -> Result<ListData<sys_dict_type::Model>> {
+pub async fn get_sort_list(db: &DatabaseConnection, page_params: PageParams, req: SysDictSearchReq) -> Result<ListData<sys_dict_type::Model>> {
     let page_num = page_params.page_num.unwrap_or(1);
     let page_per_size = page_params.page_size.unwrap_or(10);
     //  生成查询条件
@@ -67,7 +67,7 @@ where
 }
 
 /// add 添加
-pub async fn add<C>(db: &C, req: AddReq, user_id: String) -> Result<String>
+pub async fn add<C>(db: &C, req: SysDictAddReq, user_id: String) -> Result<String>
 where
     C: TransactionTrait + ConnectionTrait,
 {
@@ -92,14 +92,14 @@ where
 }
 
 /// delete 完全删除
-pub async fn delete(db: &DatabaseConnection, delete_req: DeleteReq) -> Result<String> {
+pub async fn delete(db: &DatabaseConnection, delete_req: SysDictDeleteReq) -> Result<String> {
     let count = SysDictType::find()
         .select_only()
         .column(sys_dict_type::Column::DictTypeId)
         .column(sys_dict_data::Column::DictType)
         .join_rev(
             JoinType::InnerJoin,
-            sys_dict_data::Entity::belongs_to(sys_dict_type::Entity)
+            sys_dict_data::DictDataEntity::belongs_to(sys_dict_type::Entity)
                 .from(sys_dict_data::Column::DictType)
                 .to(sys_dict_type::Column::DictType)
                 .into(),
@@ -128,7 +128,7 @@ pub async fn delete(db: &DatabaseConnection, delete_req: DeleteReq) -> Result<St
 }
 
 // edit 修改
-pub async fn edit(db: &DatabaseConnection, req: EditReq, user_id: String) -> Result<String> {
+pub async fn edit(db: &DatabaseConnection, req: SysDictEditReq, user_id: String) -> Result<String> {
     sys_dict_type::Entity::update_many()
         .col_expr(sys_dict_type::Column::DictName, Expr::value(req.dict_name))
         .col_expr(sys_dict_type::Column::DictType, Expr::value(req.dict_type))
@@ -143,7 +143,7 @@ pub async fn edit(db: &DatabaseConnection, req: EditReq, user_id: String) -> Res
 }
 
 /// get_user_by_id 获取用户Id获取用户
-pub async fn get_by_id(db: &DatabaseConnection, req: SearchReq) -> Result<sys_dict_type::Model> {
+pub async fn get_by_id(db: &DatabaseConnection, req: SysDictSearchReq) -> Result<sys_dict_type::Model> {
     let mut s = SysDictType::find().filter(sys_dict_type::Column::DeletedAt.is_null());
     //
     if let Some(x) = req.dict_type_id {

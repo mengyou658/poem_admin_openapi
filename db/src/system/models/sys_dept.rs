@@ -1,8 +1,9 @@
 use poem_openapi::Object;
 use sea_orm::FromQueryResult;
 use serde::{Deserialize, Serialize};
+use app_derive::QueryObject;
 
-#[derive(Deserialize, Debug, Object)]
+#[derive(Deserialize, Debug, Object, QueryObject)]
 pub struct SearchReq {
     pub dept_id: Option<String>,
     pub dept_name: Option<String>,
@@ -11,7 +12,7 @@ pub struct SearchReq {
     pub end_time: Option<String>,
 }
 
-#[derive(Deserialize, Clone, Debug, Object)]
+#[derive(Deserialize, Clone, Debug, Object, QueryObject)]
 pub struct AddReq {
     pub parent_id: String,
     pub dept_name: String,
@@ -22,12 +23,12 @@ pub struct AddReq {
     pub status: String,
 }
 
-#[derive(Deserialize, Object)]
+#[derive(Deserialize, Object, QueryObject)]
 pub struct DeleteReq {
     pub dept_id: String,
 }
 
-#[derive(Deserialize, Clone, Debug, Object)]
+#[derive(Deserialize, Clone, Debug, Object, QueryObject)]
 pub struct EditReq {
     pub dept_id: String,
     pub parent_id: String,
@@ -39,7 +40,7 @@ pub struct EditReq {
     pub status: String,
 }
 
-#[derive(Debug, Clone, Serialize, FromQueryResult, Default, Deserialize, Object)]
+#[derive(Debug, Clone, Serialize, FromQueryResult, Default, Deserialize, Object, QueryObject)]
 pub struct DeptResp {
     pub dept_id: String,
     pub parent_id: String,
@@ -51,7 +52,7 @@ pub struct DeptResp {
     pub status: String,
 }
 
-#[derive(Serialize, Clone, Debug, Default, Object)]
+#[derive(Serialize, Clone, Debug, Default, Deserialize, Object, QueryObject)]
 pub struct RespTree {
     #[serde(flatten)]
     pub data: DeptResp,

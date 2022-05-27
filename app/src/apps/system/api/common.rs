@@ -14,13 +14,13 @@ pub struct CommonApi;
 #[OpenApi]
 impl CommonApi {
 
-  #[oai(path="/comm/get_captcha", method="get")]
+  #[oai(path="/system/comm/get_captcha", method="get")]
   pub async fn get_captcha(&self) -> Res<CaptchaImage> {
     let res = super::super::service::common::get_captcha();
     Res::with_data(res)
   }
 
-  #[oai(path="/server/get_server_info", method="get")]
+  #[oai(path="/system/server/get_server_info", method="get")]
   pub async fn get_server_info(&self) -> Res<SysInfo> {
     let sys_info = SYSINFO.lock().await;
     let info = match &*sys_info {
@@ -34,7 +34,7 @@ impl CommonApi {
   }
 
   /// 用户登录
-  #[oai(path="/comm/login", method="post")]
+  #[oai(path="/system/comm/login", method="post")]
   pub async fn login(&self, login_req: Json<UserLoginReq>, request: &Request) -> Res<AuthBody> {
     let db = DB.get_or_init(db_conn).await;
     let res = match service::sys_user::login(db, login_req.0, request).await {

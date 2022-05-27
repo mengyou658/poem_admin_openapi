@@ -1,8 +1,9 @@
 use poem_openapi::Object;
 use sea_orm::entity::prelude::DateTime;
 use serde::Deserialize;
+use app_derive::QueryObject;
 
-#[derive(Deserialize, Debug, Object)]
+#[derive(Deserialize, Debug, Object, QueryObject)]
 pub struct SearchReq {
     pub job_log_id: Option<String>,
     pub job_id: Option<String>,
@@ -14,7 +15,7 @@ pub struct SearchReq {
     pub end_time: Option<String>,
 }
 
-#[derive(Deserialize, Debug, Object)]
+#[derive(Deserialize, Debug, Object, QueryObject)]
 pub struct AddReq {
     pub job_id: String,
     pub job_name: String,
@@ -31,12 +32,12 @@ pub struct AddReq {
     pub is_once: Option<String>,
 }
 
-#[derive(Deserialize, Object)]
+#[derive(Deserialize, Object, QueryObject)]
 pub struct DeleteReq {
     pub job_log_ids: Vec<String>,
 }
 
-#[derive(Deserialize, Clone, Debug, Object)]
+#[derive(Deserialize, Clone, Debug, Object, QueryObject)]
 pub struct CleanReq {
     pub job_id: String,
 }

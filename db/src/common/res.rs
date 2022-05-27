@@ -1,5 +1,6 @@
 use std::fmt::Debug;
 
+use app_derive::QueryObject;
 use poem::{http::StatusCode, IntoResponse, Response, Error};
 use poem_openapi::{
     payload::Json,
@@ -20,7 +21,7 @@ where
     pub page_num: usize,
 }
 /// 分页参数
-#[derive(Deserialize, Debug, Serialize, Default, Object)]
+#[derive(Deserialize, Clone, Debug, Serialize, Default, Object, QueryObject)]
 pub struct PageParams {
     pub page_num: Option<usize>,
     pub page_size: Option<usize>,

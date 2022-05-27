@@ -1,7 +1,8 @@
 use poem_openapi::Object;
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
+use app_derive::QueryObject;
 
-#[derive(Debug, Serialize, Default, Clone, Object)]
+#[derive(Debug, Serialize, Default, Clone, Deserialize, Object, QueryObject)]
 pub struct SysInfo {
     pub server: Server,
     pub cpu: Cpu,
@@ -11,7 +12,7 @@ pub struct SysInfo {
     pub network: Vec<Network>,
 }
 
-#[derive(Debug, Serialize, Default, Clone, Object)]
+#[derive(Debug, Serialize, Default, Clone, Deserialize, Object, QueryObject)]
 pub struct Cpu {
     pub name: String,
     pub arch: String,
@@ -20,14 +21,14 @@ pub struct Cpu {
     pub cores: String,
     pub total_use: f32,
 }
-#[derive(Debug, Serialize, Default, Clone, Object)]
+#[derive(Debug, Serialize, Default, Clone, Deserialize, Object, QueryObject)]
 pub struct CpuLoad {
     pub one: f64,
     pub five: f64,
     pub fifteen: f64,
 }
 
-#[derive(Debug, Serialize, Default, Clone, Object)]
+#[derive(Debug, Serialize, Default, Clone, Deserialize, Object, QueryObject)]
 pub struct Memory {
     pub totol_memory: u64,
     pub used_memory: u64,
@@ -35,14 +36,14 @@ pub struct Memory {
     pub used_swap: u64,
 }
 
-#[derive(Debug, Serialize, Default, Clone, Object)]
+#[derive(Debug, Serialize, Default, Clone, Deserialize, Object, QueryObject)]
 pub struct Server {
     pub oper_sys_name: String,
     pub host_name: String,
     pub system_version: String,
     pub system_kerne: String,
 }
-#[derive(Debug, Serialize, Default, Clone, Object)]
+#[derive(Debug, Serialize, Default, Clone, Deserialize, Object, QueryObject)]
 pub struct Process {
     pub name: String,
     pub used_memory: u64,
@@ -52,7 +53,7 @@ pub struct Process {
     pub run_time: u64,
     pub disk_usage: DiskUsage,
 }
-#[derive(Debug, Serialize, Default, Clone, Object)]
+#[derive(Debug, Serialize, Default, Clone, Deserialize, Object, QueryObject)]
 pub struct DiskUsage {
     pub read_bytes: u64,
     pub total_read_bytes: u64,
@@ -60,7 +61,7 @@ pub struct DiskUsage {
     pub total_written_bytes: u64,
 }
 
-#[derive(Debug, Serialize, Default, Clone, Object)]
+#[derive(Debug, Serialize, Default, Clone, Deserialize, Object, QueryObject)]
 pub struct Network {
     pub name: String,
     pub received: u64,

@@ -1,3 +1,4 @@
+use app_derive::QueryObject;
 use chrono::{Duration, Local};
 use headers::{authorization::Bearer, Authorization};
 use jsonwebtoken::{decode, encode, errors::ErrorKind, DecodingKey, EncodingKey, Header, Validation};
@@ -34,7 +35,7 @@ pub struct AuthPayload {
     pub name: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Object, QueryObject)]
 pub struct Claims {
     pub id: String,
     pub token_id: String,
@@ -129,7 +130,7 @@ pub async fn authorize(payload: AuthPayload, token_id: String) -> Result<AuthBod
 //     }
 // }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Object)]
+#[derive(Debug, Serialize, Deserialize, Clone, Object, QueryObject)]
 pub struct AuthBody {
     token: String,
     token_type: String,

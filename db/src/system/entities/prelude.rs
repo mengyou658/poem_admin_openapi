@@ -2,7 +2,7 @@
 
 pub use super::sys_api_db::Entity as SysApiDb;
 pub use super::sys_dept::Entity as SysDept;
-pub use super::sys_dict_data::Entity as SysDictData;
+pub use super::sys_dict_data::DictDataEntity as SysDictData;
 pub use super::sys_dict_type::Entity as SysDictType;
 pub use super::sys_job::Entity as SysJob;
 pub use super::sys_job_log::Entity as SysJobLog;

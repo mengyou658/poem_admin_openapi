@@ -1,7 +1,8 @@
+use app_derive::QueryObject;
 use poem_openapi::Object;
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 
-#[derive(Debug, Serialize, Object)]
+#[derive(Debug, Deserialize, Serialize, Object, QueryObject)]
 pub struct CaptchaImage {
     pub captcha_on_off: bool,
     pub uuid: String,
