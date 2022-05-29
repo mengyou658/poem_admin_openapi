@@ -57,7 +57,7 @@ impl SysDictData {
         }
     }
 
-    // edit 修改
+    /// edit 修改
     #[oai(path="/system/dict/data/edit", method="put")]
     pub async fn edit(&self, req: Json<DictDataEditReq>, user: Claims) -> Res<String> {
         let db = DB.get_or_init(db_conn).await;

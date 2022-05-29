@@ -14,12 +14,14 @@ pub struct CommonApi;
 #[OpenApi]
 impl CommonApi {
 
+  /// 获取验证码图片
   #[oai(path="/system/comm/get_captcha", method="get")]
   pub async fn get_captcha(&self) -> Res<CaptchaImage> {
     let res = super::super::service::common::get_captcha();
     Res::with_data(res)
   }
 
+  /// 获取系统信息
   #[oai(path="/system/server/get_server_info", method="get")]
   pub async fn get_server_info(&self) -> Res<SysInfo> {
     let sys_info = SYSINFO.lock().await;
