@@ -11,7 +11,7 @@ pub fn api() -> Route {
   let api_service = OpenApiService::new((
                                           system::api::sys_api_db::SysApiDB,
                                           system::api::common::CommonApi,
-                                          system::api::sys_dict_type::SysDictType
+                                          system::api::sys_dict_data::SysDictData
                                         ), "Combined APIs", "1.0")
     .server(format!("http://{}/api-doc", &CFG.server.address));
   let ui = api_service.swagger_ui();

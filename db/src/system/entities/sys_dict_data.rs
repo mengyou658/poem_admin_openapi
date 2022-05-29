@@ -5,17 +5,17 @@ use poem_openapi::Object;
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Copy, Clone, Default, Debug, DeriveEntity)]
-pub struct DictDataEntity;
+#[derive(Copy, Clone, Default, Debug, DeriveEntity, Deserialize, Object, QueryObject)]
+pub struct Entity;
 
-impl EntityName for DictDataEntity {
+impl EntityName for Entity {
     fn table_name(&self) -> &str {
         "sys_dict_data"
     }
 }
 
 #[derive(Clone, Debug, PartialEq, DeriveModel, DeriveActiveModel, Serialize, Deserialize)]
-pub struct DictDataModel {
+pub struct Model {
     pub dict_data_id: String,
     pub dict_sort: i32,
     pub dict_label: String,
@@ -32,6 +32,77 @@ pub struct DictDataModel {
     pub updated_at: Option<DateTime>,
     pub deleted_at: Option<DateTime>,
 }
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, Object, QueryObject)]
+pub struct SysDictDataModel {
+    pub dict_data_id: String,
+    pub dict_sort: i32,
+    pub dict_label: String,
+    pub dict_value: String,
+    pub dict_type: String,
+    pub css_class: Option<String>,
+    pub list_class: Option<String>,
+    pub is_default: String,
+    pub status: String,
+    pub create_by: String,
+    pub update_by: Option<String>,
+    pub remark: Option<String>,
+    pub created_at: Option<DateTime>,
+    pub updated_at: Option<DateTime>,
+    pub deleted_at: Option<DateTime>,
+}
+
+impl SysDictDataModel {
+
+  pub fn fromVec(it: Vec<Model>) -> Vec<SysDictDataModel> {
+    it.into_iter().map(|ii| ii.into()).collect::<Vec<SysDictDataModel>>()
+  }
+
+}
+
+impl From<SysDictDataModel> for Model {
+  fn from(it: SysDictDataModel) -> Self {
+    Self {
+      dict_data_id: it.dict_data_id,
+      dict_sort: it.dict_sort,
+      dict_label: it.dict_label,
+      dict_value: it.dict_value,
+      dict_type: it.dict_type,
+      css_class: it.css_class,
+      list_class: it.list_class,
+      is_default: it.is_default,
+      status: it.status,
+      create_by: it.create_by,
+      update_by: it.update_by,
+      remark: it.remark,
+      created_at: it.created_at,
+      updated_at: it.updated_at,
+      deleted_at: it.deleted_at
+    }
+  }
+}
+
+impl From<Model> for SysDictDataModel {
+  fn from(it: Model) -> Self {
+    Self {
+      dict_data_id: it.dict_data_id,
+      dict_sort: it.dict_sort,
+      dict_label: it.dict_label,
+      dict_value: it.dict_value,
+      dict_type: it.dict_type,
+      css_class: it.css_class,
+      list_class: it.list_class,
+      is_default: it.is_default,
+      status: it.status,
+      create_by: it.create_by,
+      update_by: it.update_by,
+      remark: it.remark,
+      created_at: it.created_at,
+      updated_at: it.updated_at,
+      deleted_at: it.deleted_at
+    }
+  }
+}
+
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveColumn)]
 pub enum Column {
@@ -68,7 +139,7 @@ impl PrimaryKeyTrait for PrimaryKey {
 pub enum Relation {}
 
 impl ColumnTrait for Column {
-    type EntityName = DictDataEntity;
+    type EntityName = Entity;
     fn def(&self) -> ColumnDef {
         match self {
             Self::DictDataId => ColumnType::String(Some(32u32)).def(),

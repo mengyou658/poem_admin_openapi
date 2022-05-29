@@ -61,6 +61,7 @@
 1. 安装sea-orm cli 工具 `cargo install sea-orm-cli`
 2. 在 .env中设置数据库地址
 3. 运行迁移命令：`sea-orm-cli migrate up`
+4. `sea-orm-cli generate entity -o src/system/entities --with-serde=both`
 
 * 数据库迁移重置：`sea-orm-cli migrate fresh`
 * 数据库降级：`sea-orm-cli migrate down`

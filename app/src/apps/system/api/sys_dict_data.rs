@@ -26,7 +26,7 @@ impl SysDictData {
     /// page_params 分页参数
     /// db 数据库连接 使用db.0
     #[oai(path="/system/dict/data/get_sort_list", method="get")]
-    pub async fn get_sort_list(&self, page_params: Query<PageParams>, req: Query<DictDataSearchReq>) -> Res<ListData<sys_dict_data::DictDataModel>> {
+    pub async fn get_sort_list(&self, page_params: Query<PageParams>, req: Query<DictDataSearchReq>) -> Res<ListData<sys_dict_data::SysDictDataModel>> {
         let db = DB.get_or_init(db_conn).await;
         let res = service::sys_dict_data::get_sort_list(db, page_params.0, req.0).await;
         match res {
@@ -71,11 +71,11 @@ impl SysDictData {
     /// get_user_by_id 获取用户Id获取用户
     /// db 数据库连接 使用db.0
     #[oai(path="/system/dict/data/get_by_id", method="get")]
-    pub async fn get_by_id(&self, req: Query<DictDataSearchReq>) -> Res<sys_dict_data::DictDataModel> {
+    pub async fn get_by_id(&self, req: Query<DictDataSearchReq>) -> Res<sys_dict_data::SysDictDataModel> {
         let db = DB.get_or_init(db_conn).await;
         let res = service::sys_dict_data::get_by_id(db, req.0).await;
         match res {
-            Ok(x) => Res::with_data(x),
+            Ok(x) => Res::with_data(sys_dict_data::SysDictDataModel::from(x)),
             Err(e) => Res::with_err(&e.to_string()),
         }
     }
@@ -83,10 +83,10 @@ impl SysDictData {
     /// get_user_by_id 获取用户Id获取用户
     /// db 数据库连接 使用db.0
     #[oai(path="/system/dict/data/get_by_type", method="get")]
-    pub async fn get_by_type(&self, req: Query<DictDataSearchReq>) -> Res<Vec<sys_dict_data::DictDataModel>> {
+    pub async fn get_by_type(&self, req: Query<DictDataSearchReq>) -> Res<Vec<sys_dict_data::SysDictDataModel>> {
         let db = DB.get_or_init(db_conn).await;
         match service::sys_dict_data::get_by_type(db, req.0).await {
-            Ok(x) => Res::with_data(x),
+            Ok(x) => Res::with_data(sys_dict_data::SysDictDataModel::fromVec(x)),
             Err(e) => Res::with_err(&e.to_string()),
         }
     }
@@ -94,11 +94,11 @@ impl SysDictData {
     /// get_all 获取全部
     /// db 数据库连接 使用db.0
     #[oai(path="/system/dict/data/get_all", method="get")]
-    pub async fn get_all(&self) -> Res<Vec<sys_dict_data::DictDataModel>> {
+    pub async fn get_all(&self) -> Res<Vec<sys_dict_data::SysDictDataModel>> {
         let db = DB.get_or_init(db_conn).await;
         let res = service::sys_dict_data::get_all(db).await;
         match res {
-            Ok(x) => Res::with_data(x),
+            Ok(x) => Res::with_data(sys_dict_data::SysDictDataModel::fromVec(x)),
             Err(e) => Res::with_err(&e.to_string()),
         }
     }

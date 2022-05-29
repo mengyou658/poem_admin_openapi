@@ -13,7 +13,7 @@ use sea_orm::{ActiveModelTrait, ColumnTrait, ConnectionTrait, DatabaseConnection
 /// get_list 获取列表
 /// page_params 分页参数
 /// db 数据库连接 使用db.0
-pub async fn get_sort_list(db: &DatabaseConnection, page_params: PageParams, req: DictDataSearchReq) -> Result<ListData<sys_dict_data::DictDataModel>> {
+pub async fn get_sort_list(db: &DatabaseConnection, page_params: PageParams, req: DictDataSearchReq) -> Result<ListData<sys_dict_data::SysDictDataModel>> {
     let page_num = page_params.page_num.unwrap_or(1);
     let page_per_size = page_params.page_size.unwrap_or(10);
     //  生成查询条件
@@ -55,9 +55,10 @@ pub async fn get_sort_list(db: &DatabaseConnection, page_params: PageParams, req
     let paginator = s.order_by_asc(sys_dict_data::Column::DictSort).paginate(db, page_per_size);
     let total_pages = paginator.num_pages().await?;
     let list = paginator.fetch_page(page_num - 1).await?;
+    let resList: Vec<sys_dict_data::SysDictDataModel> = sys_dict_data::SysDictDataModel::fromVec(list);
 
     let res = ListData {
-        list,
+        list: resList,
         total,
         total_pages,
         page_num,
@@ -154,7 +155,7 @@ pub async fn edit(db: &DatabaseConnection, req: DictDataEditReq, user_id: String
 /// get_user_by_id 获取用户Id获取用户
 /// db 数据库连接 使用db.0
 
-pub async fn get_by_id(db: &DatabaseConnection, search_req: DictDataSearchReq) -> Result<sys_dict_data::DictDataModel> {
+pub async fn get_by_id(db: &DatabaseConnection, search_req: DictDataSearchReq) -> Result<sys_dict_data::Model> {
     let mut s = SysDictData::find();
     if let Some(x) = search_req.dict_data_id {
         s = s.filter(sys_dict_data::Column::DictDataId.eq(x));
@@ -170,7 +171,7 @@ pub async fn get_by_id(db: &DatabaseConnection, search_req: DictDataSearchReq) -
     Ok(res)
 }
 
-pub async fn get_by_type(db: &DatabaseConnection, search_req: DictDataSearchReq) -> Result<Vec<sys_dict_data::DictDataModel>> {
+pub async fn get_by_type(db: &DatabaseConnection, search_req: DictDataSearchReq) -> Result<Vec<sys_dict_data::Model>> {
     let mut s = SysDictData::find();
     if let Some(x) = search_req.dict_type {
         s = s.filter(sys_dict_data::Column::DictType.eq(x));
@@ -184,7 +185,7 @@ pub async fn get_by_type(db: &DatabaseConnection, search_req: DictDataSearchReq)
 
 /// get_all 获取全部
 /// db 数据库连接 使用db.0
-pub async fn get_all(db: &DatabaseConnection) -> Result<Vec<sys_dict_data::DictDataModel>> {
+pub async fn get_all(db: &DatabaseConnection) -> Result<Vec<sys_dict_data::Model>> {
     let s = SysDictData::find()
         .filter(sys_dict_data::Column::DeletedAt.is_null())
         .filter(sys_dict_data::Column::Status.eq("1"))

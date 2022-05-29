@@ -36,7 +36,7 @@ async fn create_table(manager: &SchemaManager<'_>) -> Result<(), DbErr> {
     let schema = Schema::new(builder);
 
     Cot(db, builder, &schema, sys_dept::Entity).await?;
-    Cot(db, builder, &schema, sys_dict_data::DictDataEntity).await?;
+    Cot(db, builder, &schema, sys_dict_data::Entity).await?;
     Cot(db, builder, &schema, sys_dict_type::Entity).await?;
     Cot(db, builder, &schema, sys_job::Entity).await?;
     Cot(db, builder, &schema, sys_menu::Entity).await?;
@@ -69,7 +69,7 @@ async fn create_index(m: &SchemaManager<'_>) -> Result<(), DbErr> {
 
     Cti(m, sys_dept::Entity, "dept_pid", vec![sys_dept::Column::ParentId], "i").await?;
 
-    Cti(m, sys_dict_data::DictDataEntity, "d_type_tp", vec![sys_dict_data::Column::DictType], "i").await?;
+    Cti(m, sys_dict_data::Entity, "d_type_tp", vec![sys_dict_data::Column::DictType], "i").await?;
     Cti(m, sys_dict_type::Entity, "d_data_tp", vec![sys_dict_type::Column::DictType], "i").await?;
 
     Cti(m, sys_job::Entity, "job_tid", vec![sys_job::Column::TaskId], "i").await?;
@@ -105,7 +105,7 @@ async fn drop_table(manager: &SchemaManager<'_>) -> Result<(), DbErr> {
     println!("开始删除表格----------");
     //
     Dot(manager, sys_dept::Entity).await?;
-    Dot(manager, sys_dict_data::DictDataEntity).await?;
+    Dot(manager, sys_dict_data::Entity).await?;
     Dot(manager, sys_dict_type::Entity).await?;
     Dot(manager, sys_job::Entity).await?;
     Dot(manager, sys_menu::Entity).await?;

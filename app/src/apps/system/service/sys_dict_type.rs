@@ -99,7 +99,7 @@ pub async fn delete(db: &DatabaseConnection, delete_req: SysDictDeleteReq) -> Re
         .column(sys_dict_data::Column::DictType)
         .join_rev(
             JoinType::InnerJoin,
-            sys_dict_data::DictDataEntity::belongs_to(sys_dict_type::Entity)
+            sys_dict_data::Entity::belongs_to(sys_dict_type::Entity)
                 .from(sys_dict_data::Column::DictType)
                 .to(sys_dict_type::Column::DictType)
                 .into(),

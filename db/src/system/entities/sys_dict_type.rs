@@ -5,7 +5,7 @@ use poem_openapi::Object;
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Copy, Clone, Default, Debug, DeriveEntity, Deserialize)]
+#[derive(Copy, Clone, Default, Debug, DeriveEntity, Deserialize, QueryObject, Object)]
 pub struct Entity;
 
 impl EntityName for Entity {
@@ -14,7 +14,7 @@ impl EntityName for Entity {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, DeriveModel, DeriveActiveModel, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveModel, DeriveActiveModel, Serialize, Deserialize, QueryObject, Object)]
 pub struct Model {
     pub dict_type_id: String,
     pub dict_name: String,
