@@ -71,7 +71,7 @@ fn main() -> Result<(), std::io::Error> {
 
         let app = Route::new()
             .nest(&CFG.server.api_prefix, apps::api())
-            .nest("/", StaticFilesEndpoint::new(&CFG.web.dir).show_files_listing().index_file(&CFG.web.index))
+            .nest("/static", StaticFilesEndpoint::new(&CFG.web.dir).show_files_listing().index_file(&CFG.web.index))
             // .at("/mtc", metrics.exporter())
             // .with(Tracing)
             .with_if(CFG.server.content_gzip, Compression::new())

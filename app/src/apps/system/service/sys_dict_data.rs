@@ -3,22 +3,55 @@ use chrono::{Local, NaiveDateTime};
 use db::{
     common::res::{ListData, PageParams},
     system::{
-      entities::{prelude::SysDictData, sys_dict_data},
-      models::sys_dict_data::{DictDataAddReq, DictDataDeleteReq, DictDataEditReq, DictDataSearchReq},
+        entities::{prelude::SysDictData, sys_dict_data},
+        models::sys_dict_data::{DictDataAddReq, DictDataDeleteReq, DictDataEditReq, DictDataSearchReq},
     },
 };
 // use poem::{error::BadRequest, http::StatusCode, Error, Result};
-use sea_orm::{ActiveModelTrait, ColumnTrait, ConnectionTrait, DatabaseConnection, EntityTrait, Order, PaginatorTrait, QueryFilter, QueryOrder, Set, TransactionTrait};
+use sea_orm::{ActiveModelTrait, ColumnTrait, ConnectionTrait, DatabaseConnection, EntityTrait, Order, PaginatorTrait, QueryFilter, QueryOrder, Select, Set, TransactionTrait};
 
 /// get_list 获取列表
 /// page_params 分页参数
 /// db 数据库连接 使用db.0
 pub async fn get_sort_list(db: &DatabaseConnection, page_params: PageParams, req: DictDataSearchReq) -> Result<ListData<sys_dict_data::SysDictDataModel>> {
-    let page_num = page_params.page_num.unwrap_or(1);
-    let page_per_size = page_params.page_size.unwrap_or(10);
     //  生成查询条件
     let mut s = SysDictData::find();
 
+    s = filter_condition(s, req);
+
+    let mut total: usize = 0;
+    let mut total_pages: usize = 0;
+    let mut page_num: usize = 0;
+    let mut list: Vec<sys_dict_data::Model> = vec![];
+    // 排序
+    if let Some(sort) = page_params.sort {
+        s = sort_condition(s, sort);
+    }
+    // 获取全部数据条数
+    if (page_params.page_num.is_some() || page_params.page_size.is_some()) {
+        page_num = page_params.page_num.unwrap_or(1);
+        let page_per_size = page_params.page_size.unwrap_or(10);
+        total = s.clone().count(db).await?;
+        // 分页获取数据
+        let paginator = s.paginate(db, page_per_size);
+        total_pages = paginator.num_pages().await?;
+        list = paginator.fetch_page(page_num - 1).await?;
+    } else {
+        list = s.all(db).await?;
+    }
+
+    let resList: Vec<sys_dict_data::SysDictDataModel> = sys_dict_data::SysDictDataModel::fromVec(list);
+
+    let res = ListData {
+        list: resList,
+        total,
+        total_pages,
+        page_num,
+    };
+    Ok(res)
+}
+
+pub fn filter_condition(mut s: Select<sys_dict_data::Entity>, req: DictDataSearchReq) -> Select<sys_dict_data::Entity> {
     if let Some(x) = req.dict_type {
         if !x.is_empty() {
             s = s.filter(sys_dict_data::Column::DictType.eq(x));
@@ -38,32 +71,44 @@ pub async fn get_sort_list(db: &DatabaseConnection, page_params: PageParams, req
     if let Some(x) = req.begin_time {
         if !x.is_empty() {
             let x = x + " 00:00:00";
-            let t = NaiveDateTime::parse_from_str(&x, "%Y-%m-%d %H:%M:%S")?;
+            let t = NaiveDateTime::parse_from_str(&x, "%Y-%m-%d %H:%M:%S").unwrap();
             s = s.filter(sys_dict_data::Column::CreatedAt.gte(t));
         }
     }
     if let Some(x) = req.end_time {
         if !x.is_empty() {
             let x = x + " 23:59:59";
-            let t = NaiveDateTime::parse_from_str(&x, "%Y-%m-%d %H:%M:%S")?;
+            let t = NaiveDateTime::parse_from_str(&x, "%Y-%m-%d %H:%M:%S").unwrap();
             s = s.filter(sys_dict_data::Column::CreatedAt.lte(t));
         }
     }
-    // 获取全部数据条数
-    let total = s.clone().count(db).await?;
-    // 分页获取数据
-    let paginator = s.order_by_asc(sys_dict_data::Column::DictSort).paginate(db, page_per_size);
-    let total_pages = paginator.num_pages().await?;
-    let list = paginator.fetch_page(page_num - 1).await?;
-    let resList: Vec<sys_dict_data::SysDictDataModel> = sys_dict_data::SysDictDataModel::fromVec(list);
+    return s;
+}
 
-    let res = ListData {
-        list: resList,
-        total,
-        total_pages,
-        page_num,
-    };
-    Ok(res)
+pub fn sort_condition(mut s: Select<sys_dict_data::Entity>, sort: String) -> Select<sys_dict_data::Entity> {
+    if !sort.is_empty() {
+            let ele: Vec<_> = sort.split(",").collect();
+            let mut flag = true;
+            for eleU in ele {
+                let mut tmpSort = eleU.split_ascii_whitespace();
+                let name = tmpSort.next().unwrap();
+                let direction = tmpSort.next().unwrap_or("asc");
+                let ord = if direction == "asc"  {Order::Asc} else {Order::Desc} ;
+                match name {
+                    "dictDataId" =>  {
+                        s = s.order_by(sys_dict_data::Column::DictDataId, ord);
+                        flag = false;
+                        ()
+                    },
+                    _ => ()
+                }
+            }
+            if flag {
+                s = s.order_by_asc(sys_dict_data::Column::DictSort)
+            }
+            
+    }
+    return s;
 }
 
 pub async fn check_dict_data_is_exist<C>(req: DictDataAddReq, db: &C) -> Result<bool>

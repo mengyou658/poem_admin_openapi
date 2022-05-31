@@ -25,6 +25,7 @@ where
 pub struct PageParams {
     pub page_num: Option<usize>,
     pub page_size: Option<usize>,
+    pub sort: Option<String>,
 }
 
 /// 数据统一返回格式
